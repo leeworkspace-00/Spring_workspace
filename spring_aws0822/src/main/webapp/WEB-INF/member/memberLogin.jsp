@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%
+	String msg = "";
+	if(request.getAttribute("msg")!=null) {
+		msg = (String)request.getAttribute("msg"); 
+	}
+	%>
 
 <!DOCTYPE HTML>
 <HTML>
@@ -50,7 +56,20 @@ table {
 	border: 5px solid gray;
 }
 </style>
+
+
+
 <script>
+
+<%if(msg !=""){
+
+out.println("alert('"+msg+"')");
+}
+%>
+
+
+
+
 //아이디 비밀번호 유효성 검사
 	function check() {
 	let memberid = document.getElementsByName("memberid");
@@ -69,15 +88,12 @@ table {
 	}
 	
 	var fm = document.frm;
-	fm.action = "<%=request.getContextPath()%>/member/memberLoginAction.aws"; // 가상경로 지정 액션은 처리하는 의미
+	fm.action = "<%=request.getContextPath()%>/member/memberLoginAction.aws"; 
 	fm.method = "post";
 	fm.submit();
-
-	
-	
-	
 	return;
 }
+
 </script>
 
 </HEAD>

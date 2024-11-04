@@ -21,8 +21,8 @@
 		<beans:property name="suffix" value=".jsp" /> <!--  마지막 값은 이걸로 정해서 가운데 넣을 주소는 작성자가 정해라 -->
 	</beans:bean>
 	
-	<!-- <beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value = "D:\dev\springUpload"></beans:constructor-arg> beans생성자 : 인자값
+<!-- 	<beans:bean id="uploadPath" class="java.lang.String">
+		<beans:constructor-arg value = "D:/dev/springUpload"></beans:constructor-arg>
 	
 	
 	
@@ -30,12 +30,12 @@
 	
 	<beans:bean id="multipartResolver" 
 	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	<beans:property name="maxUploadSize" value="10485760" />	설정파일 
-	</beans:bean>
-	-->
+	<beans:property name="maxUploadSize" value="10485760" />	
+	</beans:bean> -->
+
 	
 	
-	<context:component-scan base-package="com.myaws.myapp" />
+	<context:component-scan base-package="com.myaws.myapp.controller" />
 	
 	
 	

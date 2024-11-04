@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		<!-- bean 형식 -->
+		<!-- 해당위치에 있는 클래스 연결해주고 안에 있는 메서드 호출 -->
+		
+		<!-- 
+		<bean id = "tt" class = "com.myaws.myapp.service.Test"></bean> -->
+		
+		<bean id = "db" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name = "driverClassName" value = "com.mysql.cj.jdbc.Driver"/>		
+			<property name="url" value = "jdbc:mysql://127.0.0.1:3306/aws0822?useSSL=false&amp;serverTimeZone=UTC&amp;allowPublicKeyRetrieval = true"/>
+			<property name = "username" value = "root"/>
+			<property name = "password"	value = "1234"/>
+		</bean>
+		<!--  콩만드는 공장 -->
+		<bean id = "sqlSessionFactory" class = "org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 참조값은 위에 있는 db를 참조해서 mybatis와 mysql을 연결하겠다 -->
+			<property name="dataSource" ref = "db"/>
+			<property name="mapperLocations" value = "classpath:mappers/*.xml"/>
+			<!--  mybatis 환경설정에 관련된정보는 여기에 담겠다-->		
+			<property name="configLocation" value = "classpath:config/mybatis_config.xml"/>
+
+		</bean>
+		
+		<!--  공장에서나온 제품을 사용하는 실질적인 장소 대리점과 같다 -->
+		<bean id="sqlSession" class = "org.mybatis.spring.SqlSessionTemplate">
+			<constructor-arg name = "sqlSessionFactory" ref = "sqlSessionFactory"/>
+		</bean>	
+			
+		<context:component-scan base-package="com.myaws.myapp">
+			<context:exclude-filter type = "annotation" expression = "org.springframework.stereotype.Controller"/>
+		</context:component-scan>
+		
+		
+		
+		
+	
+		
+</beans>

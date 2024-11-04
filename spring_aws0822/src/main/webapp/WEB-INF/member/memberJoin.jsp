@@ -6,13 +6,12 @@
 <link href="../resources/style.css" type="text/css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> <!-- mvc jquery-CDN주소 추가  -->
 <script>
-//alert("ddddd");
+
 const email = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$/i;
 	
-//alert(email.test("hello5#emaicom"));
-	
-//버튼을 눌렀을때 check함수 작동
-function check(){
+
+function check(){ 
+//	alert("test");
 	
 	//유효성 검사하기	
 	var fm = document.frm;	
@@ -21,10 +20,6 @@ function check(){
 		alert("아이디를 입력해주세요");
 		fm.memberid.focus();
 		return;
-	}else if (fm.btn.value=="N"){
-		alert("아이디중복체크를 해주세요");
-		fm.memberid.focus();
-		return;		
 	}else if (fm.memberpwd.value ==""){		
 		alert("비밀번호를 입력해주세요");
 		fm.memberpwd.focus();
@@ -51,32 +46,22 @@ function check(){
 		fm.memberemail.value="";
 		fm.memberemail.focus();
 		return;
-	}else if (fm.memberphone.value ==""){
-		alert("연락처를 입력해주세요");
-		fm.memberphone.focus();
-		return;
-	}else if (fm.memberbirth.value ==""){
-		alert("생년월일을 입력해주세요");
-		fm.memberbirth.focus();
-		return;
-	}else if (hobbyCheck() ==false)  {	
-		alert("취미를 한개 이상 선택해주세요");	
-		return;
-	}	
+	}else if (fm.btn.value=="N"){
+		alert("아이디중복체크를 해주세요");
+		fm.memberid.focus();
+	
+	}
+		
+// check 함수 끝	
 	
 	var ans = confirm("저장하시겠습니까?");
 	
-	if (ans == true){
-		//alert("이동할 정보등록할 차례입니다.");
-		//action="./memberJoinAction.jsp" method="post"  html 홈태그 기능을 자바스크립트로 제어
-		
-		
-		//가상경로를 사용해서 쓸 예정   가짜경로 형식은  /기능/세부기능.aws
-		fm.action="<%=request.getContextPath()%>/member/memberJoinAction.aws";
+	if (ans == true){						
+		fm.action="<%=request.getContextPath()%>/member/memberJoinAction.aws"; 
 		fm.method="post"; 
 		fm.submit();
 	}
-	return;   //리턴에 값을 안쓰면 그냥 멈춤 종료
+	return;
 }
 function hobbyCheck(){
 	
@@ -90,12 +75,13 @@ function hobbyCheck(){
 		 }
 	}
 	
-	/* if (flag== false){
+	 if (flag== false){
 		alert("취미를 한개 이상 선택해주세요");
 		return false;
-	}	 */
+	}	 
 	return flag;
 }
+
 
 $(document).ready(function(){
 	
@@ -196,7 +182,7 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th>생년월일</th>
-				<td><input type="number" name="memberbirth" maxlength="8" style="width:100px;"> 
+				<td><input type="text" name="memberbirth" maxlength="8" style="width:100px;"> 
 				예)20240101</td>
 			</tr>
 			<tr>
