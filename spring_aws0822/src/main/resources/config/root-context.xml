@@ -17,9 +17,8 @@
 		<!-- bean 형식 -->
 		<!-- 해당위치에 있는 클래스 연결해주고 안에 있는 메서드 호출 -->
 		
-		<!-- 
-		<bean id = "tt" class = "com.myaws.myapp.service.Test"></bean> -->
 		
+		<!-- 콩만들때  필요한 원재료  창고 주소랑  비밀번호 알려주기 -->
 		<bean id = "db" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
 			<property name = "driverClassName" value = "com.mysql.cj.jdbc.Driver"/>		
 			<property name="url" value = "jdbc:mysql://127.0.0.1:3306/aws0822?useSSL=false&amp;serverTimeZone=UTC&amp;allowPublicKeyRetrieval = true"/>
@@ -33,18 +32,24 @@
 			<property name="mapperLocations" value = "classpath:mappers/*.xml"/>
 			<!--  mybatis 환경설정에 관련된정보는 여기에 담겠다-->		
 			<property name="configLocation" value = "classpath:config/mybatis_config.xml"/>
-
 		</bean>
 		
 		<!--  공장에서나온 제품을 사용하는 실질적인 장소 대리점과 같다 -->
 		<bean id="sqlSession" class = "org.mybatis.spring.SqlSessionTemplate">
 			<constructor-arg name = "sqlSessionFactory" ref = "sqlSessionFactory"/>
 		</bean>	
+		
+		<!-- ================마이바티스(데이터베이스 관련 빈)========================== -->
 			
 		<context:component-scan base-package="com.myaws.myapp">
 			<context:exclude-filter type = "annotation" expression = "org.springframework.stereotype.Controller"/>
 		</context:component-scan>
 		
+
+		<!-- 
+<context:component-scan> 태그는 Spring Framework에서 특정 패키지를 스캔하여 Spring의 Bean으로 등록할 클래스를 자동으로 찾아주는 기능을 합니다. 이 태그는 주로 Spring 설정 파일 (예: applicationContext.xml)에서 사용됩니다.
+
+주어진 코드 예시에서는 com.myaws.myapp 패키지를 스캔하면서, @Controller 애너테이션이 붙은 클래스들을 제외하는 설정입니다. -->
 		
 		
 		

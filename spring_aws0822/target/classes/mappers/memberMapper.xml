@@ -15,11 +15,16 @@
 	<select id="memberIdCheck" parameterType = "String" resultType = "int">
 		SELECT COUNT(*) as cnt from member where memberid = #{memberid}
 	</select>
-	
-	
+		
 	<select id = "memberLoginCheck" parameterType = "String" resultType = "mv">
 		SELECT * from member where memberid = #{memberid}
     </select>
+    
+    
+    <select id = "memberSelectAll" resultType="mv">		<!-- resultType="mv" >> 여러개 담기  하나를 담아도 mv로 담아오자 -->   
+  		SELECT * FROM member WHERE delyn = 'N' ORDER BY midx desc <!-- 삭제되지 않은 회원 정보 모두 가져오기 -->
+    </select>
+    
 
 </mapper>
 	

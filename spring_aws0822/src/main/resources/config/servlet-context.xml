@@ -21,7 +21,36 @@
 		<beans:property name="suffix" value=".jsp" /> <!--  마지막 값은 이걸로 정해서 가운데 넣을 주소는 작성자가 정해라 -->
 	</beans:bean>
 	
-<!-- 	<beans:bean id="uploadPath" class="java.lang.String">
+	<beans:bean id = "loginInterceptor" class = "com.myaws.myapp.interceptor.LoginInterceptor">
+	</beans:bean>
+	
+	<beans:bean id = "authInterceptor" class = "com.myaws.myapp.interceptor.AuthInterceptor">
+	</beans:bean>
+	
+	
+	<!--  -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/memberLoginAction.aws"/> <!-- 로그인하러 갈때 연결해주기  -->
+			<beans:ref bean = "loginInterceptor"/> <!--  참조값은 저 위에 있는 콩안에 있는 걸로 참조하겠다 -->
+		</interceptor>
+	</interceptors>
+	
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/memberList.aws"/> <!-- 회원 목록 보기 할때 -->
+			<beans:ref bean = "authInterceptor"/> <!-- 이 인터셉터가 작동하도록한다 -->
+		</interceptor>
+	</interceptors>
+	
+	
+	
+	
+	<context:component-scan base-package="com.myaws.myapp.controller" />
+	
+	
+	<!-- 	<beans:bean id="uploadPath" class="java.lang.String">
 		<beans:constructor-arg value = "D:/dev/springUpload"></beans:constructor-arg>
 	
 	
@@ -32,10 +61,6 @@
 	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	<beans:property name="maxUploadSize" value="10485760" />	
 	</beans:bean> -->
-
-	
-	
-	<context:component-scan base-package="com.myaws.myapp.controller" />
 	
 	
 	

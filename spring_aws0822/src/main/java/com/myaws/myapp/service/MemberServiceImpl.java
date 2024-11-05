@@ -1,6 +1,8 @@
 package com.myaws.myapp.service;
 
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,28 +39,11 @@ public class MemberServiceImpl implements MemberService  {
 		MemberVo mv = mm.memberLoginCheck(memberId);		
 		return mv;	
 	}
+
+	@Override
+	public ArrayList<MemberVo> memberSelectAll() {
+		// mybatis 용 메서드 부르기 	
+		ArrayList<MemberVo> alist = mm.memberSelectAll();	// 매퍼 클래스 불러서 안에 있는 쿼리문 실행시키기		
+		return alist;
+	}
 }
-
-
-/* 디버깅 코드 
- * 
- * System.out.println("memberInsert들어옴");
- * System.out.println("id"+mv.getMemberid());
- * System.out.println("pwd"+mv.getMemberpwd());
- * System.out.println("name"+mv.getMembername());
- * System.out.println("bir"+mv.getMemberbirth());
- * System.out.println("id"+mv.getMemberaddr());
- * System.out.println("id"+mv.getMemberemail());
- * System.out.println("id"+mv.getMembergender());
- * System.out.println("id"+mv.getMemberhobby());
- * System.out.println("id"+mv.getMemberphone());
- * System.out.println("ip"+mv.getMemberip());
-
- System.out.println("mm"+mm); 
-
- * @Override public int memberInsert(MemberVo mv) {
- * System.out.println("sqlSession"+sqlSession); MemberMapper mm =
- * sqlSession.getMapper(MemberMapper.class);
- * 
- * int value = 0; return value; }
- */

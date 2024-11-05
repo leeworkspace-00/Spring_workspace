@@ -1,5 +1,7 @@
 package com.myaws.myapp.persistence;
 
+import java.util.*;
+
 import com.myaws.myapp.domain.MemberVo;
 
 public interface MemberMapper {
@@ -15,6 +17,8 @@ public interface MemberMapper {
 	public int memberIdCheck(String memberId);		// 영속성 > 마이바티스 용 메서드 하나 더 생성
 
 	public MemberVo memberLoginCheck(String memberId);
+	
+	public ArrayList <MemberVo> memberSelectAll();
 
 	
 	

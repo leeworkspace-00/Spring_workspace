@@ -1,5 +1,7 @@
 package com.myaws.myapp.controller;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -7,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +32,7 @@ public class MemberController {		// 컨트롤러 용도의 객체를 생성해�
 	private MemberService memberService;
 	
 	@Autowired(required=false)  // 주입해주기 
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	private BCryptPasswordEncoder bCryptPasswordEncoder; // 암호화 
 	
 	
 	@Autowired 
@@ -119,7 +122,7 @@ public class MemberController {		// 컨트롤러 용도의 객체를 생성해�
 				rttr.addAttribute("midx","");
 				rttr.addAttribute("memberId","");
 				rttr.addAttribute("memberName","");
-				rttr.addFlashAttribute("msg", "해당하는 아이디가 없습니다");		// 한번 사용하고 없어짐 세션 값을 사용한 후에 지워버림				
+				rttr.addFlashAttribute("msg", "해당하는 아이디가 없습니다");		// 한번 사용하고 없어질 세션. 값을 사용한 후에 지워버림				
 				path = "redirect:/member/memberLogin.aws";	
 				
 				}
@@ -131,5 +134,18 @@ public class MemberController {		// 컨트롤러 용도의 객체를 생성해�
 				rttr.addFlashAttribute("msg", "해당하는 아이디가 없습니다");				
 				path = "redirect:/member/memberLogin.aws";									
 			} return path; // path 값 리턴 		
-	}					
+	}
+	
+	
+	@RequestMapping(value = "memberList.aws", method = RequestMethod.GET)
+	public String memberList(Model model) {
+		
+		ArrayList<MemberVo> alist = memberService.memberSelectAll();
+		
+		model.addAttribute("alist", alist);
+		
+				
+		return "WEB-INF/member/memberList";// 뒤에 .aws는 자동으로 붙음
+	}	
+	
 }

@@ -6,6 +6,10 @@
 		msg = (String)request.getAttribute("msg"); 
 	}
 	%>
+	
+	
+
+
 
 <!DOCTYPE HTML>
 <HTML>
@@ -16,28 +20,24 @@ header {
 	width: 100%;
 	height: 100px;
 	text-align: center;
-	--background-color: yellow;
 }
 
 nav {
 	width: 15%;
 	height: 400px;
 	float: left;
-	--background-color: blue;
 }
 
 section {
 	width: 70%;
 	height: 400px;
 	float: left;
-	--background: olivedrab;
 }
 
 aside {
 	width: 15%;
 	height: 400px;
 	float: left;
-	--background: orange;
 }
 
 footer {
@@ -45,7 +45,6 @@ footer {
 	height: 150px;
 	clear: both;
 	text-align: center;
-	--background: plum;
 }
 
 tr {
@@ -57,18 +56,17 @@ table {
 }
 </style>
 
-
-
 <script>
+
+
+
+
 
 <%if(msg !=""){
 
-out.println("alert('"+msg+"')");
+out.println("alert('"+msg+"')"); // 
 }
 %>
-
-
-
 
 //아이디 비밀번호 유효성 검사
 	function check() {
@@ -116,7 +114,7 @@ out.println("alert('"+msg+"')");
 						</td>
 					<tr>
 						<td colspan=2 style="text-align: center;">
-						<input type="button" name="btn" value="로그인" onclick = "check();">
+						<input type="button" name="btn" value="로그인" onclick= "check();">
 						</td>
 					</tr>
 				</table>
