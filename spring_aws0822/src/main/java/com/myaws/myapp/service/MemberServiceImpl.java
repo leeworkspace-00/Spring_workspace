@@ -17,7 +17,7 @@ public class MemberServiceImpl implements MemberService  {
 	
 	 @Autowired(required=false)
 	   public MemberServiceImpl(SqlSession sqlSession) {
-		 System.out.println("sqlSession:"+sqlSession);
+		 //System.out.println("sqlSession:"+sqlSession);
 	     this.mm = sqlSession.getMapper(MemberMapper.class); // 실행 파일이 있는지 확인하기 위해 class를 붙임
 	                                                 // mybatis를 쓰기 위해 mapper와 연동
 	   }
@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService  {
 
 	@Override
 	public ArrayList<MemberVo> memberSelectAll() {
-		// mybatis 용 메서드 부르기 	
+	
 		ArrayList<MemberVo> alist = mm.memberSelectAll();	// 매퍼 클래스 불러서 안에 있는 쿼리문 실행시키기		
 		return alist;
 	}

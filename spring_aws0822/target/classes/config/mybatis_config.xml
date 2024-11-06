@@ -4,6 +4,9 @@
 <configuration> 
 <typeAliases>
 	<typeAlias alias="mv" type="com.myaws.myapp.domain.MemberVo"/>
+	<typeAlias alias="bv" type="com.myaws.myapp.domain.BoardVo"/>
+	<typeAlias alias="scri" type="com.myaws.myapp.domain.searchCriteria"/>
+
 
 </typeAliases>
 </configuration>

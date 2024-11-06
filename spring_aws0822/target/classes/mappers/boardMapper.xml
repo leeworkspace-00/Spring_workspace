@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myaws.myapp.persistence.BoardMapper">   
+    <sql id = "search">
+    
+    	<if test="searchType != null and searchType.equals('writer')">
+    		and writer like concat('%',#{keyword},'%')
+    	</if>  
+    	
+    	
+    	<if test="searchType != null and searchType.equals('subject')">
+    		and subject like concat('%',#{keyword},'%')
+    	</if>       
+    
+    </sql>
+    
+    
+    <select id = "boardSelectAll" parameterType="HashMap" resultType="bv">		<!-- resultType="mv" >> 여러개 담기  하나를 담아도 mv로 담아오자 -->   
+  		SELECT * FROM board where delyn='N' 
+ 		
+  		<include refid = "search"/>
+  		
+  		ORDER BY originbidx desc, depth asc limit #{startPageNum}, #{perPageNum} 		
+  	</select>
+  	  	
+  	<select id ="boardTotalCount" parameterType="scri" resultType="int" >
+  		SELECT count(*) as cnt FROM board where delyn='N'	
+ 		<include refid = "search"/>
+  	</select>
+  	
+  	
+  	
+    
+
+</mapper>

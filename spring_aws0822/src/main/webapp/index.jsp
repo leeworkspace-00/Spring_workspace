@@ -9,7 +9,7 @@
 <body>
 
 <% if(session.getAttribute("midx") != null) {
-	out.println(session.getAttribute("memberName")+"로그아웃"); 
+	out.println(session.getAttribute("memberName")+"<a href='"+request.getContextPath()+"/member/memberLogout.aws'>로그아웃</a>"); 
 }
 
 
@@ -26,6 +26,10 @@
 	<div>
 		<a href = "<%=request.getContextPath() %>/member/memberList.aws">회원목록 페이지</a>
 	</div>
+	<div>
+		<a href = "<%=request.getContextPath() %>/board/boardList.aws">게시판목록 페이지</a>
+	</div>
+	
 
 </body>
 </html>

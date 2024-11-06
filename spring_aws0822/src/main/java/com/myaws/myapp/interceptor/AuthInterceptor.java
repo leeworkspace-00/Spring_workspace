@@ -31,12 +31,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {		// bean 등록
 			
 		}else {
 			
-			
 			// 회원번호가 있는 상태 = 로그인 되어 있는 상태
-		
-			
-			
-		
 			
 			return true;
 		}
