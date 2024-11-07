@@ -1,15 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ page import="com.myaws.myapp.domain.*" %>  
-    <%
-   BoardVo bv = (BoardVo)request.getAttribute("bv");			// 강제 형변환으로 양쪽의 타입을 맞춰주자
-   %> 
+    
+<%
+String msg= "";
+
+if (request.getAttribute("msg") != null){
+ msg = (String)request.getAttribute("msg");
+}
+if (msg !=""){
+	 out.println("<script>alert('"+msg+"');</script>");	
+	 }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>글쓰기</title>
-<link href="../board/boardStyle.css" rel="stylesheet">
+<link href="/resources/boardStyle.css" rel="stylesheet">
 
 <script>
 function saveBtn()  {
@@ -38,6 +47,7 @@ function saveBtn()  {
 			fm.action="<%=request.getContextPath()%>/board/boardWriteAction.aws";
 			fm.method="post";
 			fm.enctype="multipart/form-data";		// 문자를 넘길때 어떤 형태로 넘길건지 지정한다
+			//multipart = 이미지파일과 같은 여러형태의 파일 타입을 저장하고 업로드하고 다운로드 받을거임
 			fm.submit();
 			return;
 		}

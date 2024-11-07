@@ -21,6 +21,22 @@
 		<beans:property name="suffix" value=".jsp" /> <!--  마지막 값은 이걸로 정해서 가운데 넣을 주소는 작성자가 정해라 -->
 	</beans:bean>
 	
+	
+		<!--  업로드 경로 빈저장  -->
+	<beans:bean id="uploadPath" class="java.lang.String">
+		<beans:constructor-arg value = "D:/dev/springUpload"></beans:constructor-arg>	
+	</beans:bean> 
+	
+	<!--  문자열이 아닌 이미지 등 여러 파일 업로드 할 때 사용하는 빈 등록 -->
+	
+	<beans:bean id="multipartResolver" 
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<beans:property name="maxUploadSize" value="10485760" />	
+	
+	</beans:bean>
+	
+	
+	
 	<beans:bean id = "loginInterceptor" class = "com.myaws.myapp.interceptor.LoginInterceptor">
 	</beans:bean>
 	
@@ -40,28 +56,15 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/member/memberList.aws"/> <!-- 회원 목록 보기 할때 -->
+			<mapping path="/board/boardWrite.aws"/>
 			<beans:ref bean = "authInterceptor"/> <!-- 이 인터셉터가 작동하도록한다 -->
 		</interceptor>
 	</interceptors>
 	
+
 	
 	
-	
-	<context:component-scan base-package="com.myaws.myapp.controller" />
-	
-	
-	<!-- 	<beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value = "D:/dev/springUpload"></beans:constructor-arg>
-	
-	
-	
-	</beans:bean> 
-	
-	<beans:bean id="multipartResolver" 
-	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	<beans:property name="maxUploadSize" value="10485760" />	
-	</beans:bean> -->
-	
+		<context:component-scan base-package="com.myaws.myapp.controller" />
 	
 	
 </beans:beans>

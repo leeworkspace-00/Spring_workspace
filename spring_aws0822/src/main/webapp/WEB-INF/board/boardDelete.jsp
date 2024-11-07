@@ -1,15 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%String bidx = (String)request.getAttribute("bidx"); %>
+    <%@ page import="com.myaws.myapp.domain.*" %>  
+    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>글삭제</title>
-<link href="../board/boardStyle.css" rel="stylesheet">
+<link href="/resources/boardStyle.css" rel="stylesheet">
 
 <script>
-function deleteBtn() {
+function saveBtn() {
 	let fm = document.frm;
 
 	
@@ -24,32 +26,37 @@ function deleteBtn() {
 		fm.action="<%=request.getContextPath()%>/board/boardDeleteAction.aws";
 		fm.method="post";
 		fm.submit();
-	} 
+	}
 	return;
 	}
+
 </script>
+
+
 </head>
 <body>
+
 <header>
-   <h2 class = "mainTitle">글삭제</h2>
+	<h2 class="mainTitle">글삭제</h2>
 </header>
 
 <form name="frm">
 <input type = "hidden" name = "bidx" value = "<%=bidx%>">
-<table class = "writeTable">
-      <tr>
-         <th>비밀번호</th>
-         <td><input type="password" name="password"></td>
-      </tr>
-      
-   </table>
-   
-   <div class="btnBox">
-      <button type="button" class="btn" onclick="deleteBtn();">삭제</button>
-      <a class="btn aBtn" href="#"  onclick="history.back();">취소</a>
-   </div>
+
+	<table class = "writeTable">
+		<tr>
+			<th>비밀번호</th>
+			<td><input type="password" name="password"></td>
+		</tr>
+		
+	</table>
+	
+	<div class="btnBox">
+		<button type="button" class="btn" onclick="check();">저장</button>
+		<a class="btn aBtn" href="#"  onclick="history.back();">취소</a>
+	</div>
 
 </form>
-
+	
 </body>
 </html>

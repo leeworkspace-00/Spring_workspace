@@ -10,12 +10,30 @@ public class BoardVo {
 	private String writer;
 	private int recom;
 	private int viewcnt;
-	private String filename;
+	//private String filename;
 	private String writeday;
 	private String modifyday;
 	private String delyn;
 	private String ip;
 	private String password;
+	private String uploadedFilename;
+	private int midx;
+
+	public int getMidx() {
+		return midx;
+	}
+
+	public void setMidx(int midx) {
+		this.midx = midx;
+	}
+
+	public String getUploadedFilename() {
+		return uploadedFilename;
+	}
+
+	public void setUploadedFilename(String uploadedFilename) {
+		this.uploadedFilename = uploadedFilename;
+	}
 
 	public int getBidx() {
 		return bidx;
@@ -89,13 +107,11 @@ public class BoardVo {
 		this.viewcnt = viewcnt;
 	}
 
-	public String getFilename() {
-		return filename;
-	}
-
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+	/*
+	 * public String getFilename() { return filename; }
+	 * 
+	 * public void setFilename(String filename) { this.filename = filename; }
+	 */
 
 	public String getWriteday() {
 		return writeday;

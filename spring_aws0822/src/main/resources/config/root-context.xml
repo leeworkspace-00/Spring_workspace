@@ -6,24 +6,31 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:task="http://www.springframework.org/schema/task"
-	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		<!-- bean 형식 -->
 		<!-- 해당위치에 있는 클래스 연결해주고 안에 있는 메서드 호출 -->
 		
-		
+		<context:property-placeholder location = "classpath:properties/db.properties" />
 		<!-- 콩만들때  필요한 원재료  창고 주소랑  비밀번호 알려주기 -->
+		
 		<bean id = "db" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
-			<property name = "driverClassName" value = "com.mysql.cj.jdbc.Driver"/>		
-			<property name="url" value = "jdbc:mysql://127.0.0.1:3306/aws0822?useSSL=false&amp;serverTimeZone=UTC&amp;allowPublicKeyRetrieval = true"/>
-			<property name = "username" value = "root"/>
-			<property name = "password"	value = "1234"/>
+			<property name = "driverClassName" value = "${db.driver}"/>		
+			<property name="url" value = "${db.url}"/>
+			<property name = "username" value = "${db.username}"/>
+			<property name = "password"	value = "${db.password}"/>
 		</bean>
 		<!--  콩만드는 공장 -->
 		<bean id = "sqlSessionFactory" class = "org.mybatis.spring.SqlSessionFactoryBean">
@@ -39,6 +46,16 @@
 			<constructor-arg name = "sqlSessionFactory" ref = "sqlSessionFactory"/>
 		</bean>	
 		
+		<!--  트렌젝션 사용할 빈 등록 -->
+		<bean id = "transactionManager" class = "org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<constructor-arg ref="db"/>
+		</bean>
+		<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/> 	<!-- 프록시 : 우회하다 -->	
+		
+		
+		
+		
+		
 		<!-- ================마이바티스(데이터베이스 관련 빈)========================== -->
 			
 		<context:component-scan base-package="com.myaws.myapp">
@@ -46,10 +63,6 @@
 		</context:component-scan>
 		
 
-		<!-- 
-<context:component-scan> 태그는 Spring Framework에서 특정 패키지를 스캔하여 Spring의 Bean으로 등록할 클래스를 자동으로 찾아주는 기능을 합니다. 이 태그는 주로 Spring 설정 파일 (예: applicationContext.xml)에서 사용됩니다.
-
-주어진 코드 예시에서는 com.myaws.myapp 패키지를 스캔하면서, @Controller 애너테이션이 붙은 클래스들을 제외하는 설정입니다. -->
 		
 		
 		

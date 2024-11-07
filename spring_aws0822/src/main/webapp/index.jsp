@@ -19,7 +19,6 @@
 	<div>
 		<a href = "<%=request.getContextPath() %>/member/memberJoin.aws">회원가입 페이지</a>
 	</div>
-	
 	<div>
 		<a href = "<%=request.getContextPath() %>/member/memberLogin.aws">회원로그인 페이지</a>
 	</div>
@@ -29,6 +28,7 @@
 	<div>
 		<a href = "<%=request.getContextPath() %>/board/boardList.aws">게시판목록 페이지</a>
 	</div>
+
 	
 
 </body>

@@ -3,6 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myaws.myapp.persistence.BoardMapper">   
+
+<!--  글목록보여주는 쿼리 작성 -->
     <sql id = "search">
     
     	<if test="searchType != null and searchType.equals('writer')">
@@ -12,7 +14,8 @@
     	
     	<if test="searchType != null and searchType.equals('subject')">
     		and subject like concat('%',#{keyword},'%')
-    	</if>       
+    	</if>      
+    	
     
     </sql>
     
@@ -29,6 +32,29 @@
   		SELECT count(*) as cnt FROM board where delyn='N'	
  		<include refid = "search"/>
   	</select>
+  	
+  	
+  	<!-- 글쓰기 쿼리문 작성 -->
+  	<insert id = "boardInsert" parameterType="bv">
+  		<!--  mybatis 안에서 사용하는 selectKey -->
+  		<selectKey keyProperty = "bidx" resultType="int" order = "AFTER">
+			select max(bidx) as bidx from board	 	
+  		</selectKey>
+  		
+  		INSERT INTO board (originbidx,depth,level_,subject,contents,writer,password,midx,filename,ip)
+  		 value(null,0,0,#{subject},#{contents},#{writer},#{password},#{midx},#{uploadedFilename},#{ip})
+  	</insert>
+  	
+  	
+  	<update id="boardOriginbidxUpdate" parameterType="int">
+  		update board set originbidx = #{bidx} where bidx = #{bidx}
+  	</update>
+  	
+  	<select id ="boardSelectOne" parameterType="int" resultType="bv">
+  		SELECT * FROM board where delyn='N' AND bidx = #{bidx}
+  	</select>
+  
+  	
   	
   	
   	
