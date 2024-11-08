@@ -15,6 +15,17 @@ public interface BoardService {		// service > interface
 	public int boardInsert(BoardVo bv);
 	
 	public BoardVo boardSelectOne(int bidx);
+	
+	// 조회수 메서드
+	public int boardViewCntUpdate(int bidx);
+	//추천하기 기능 메서드
+	public int boardRecomUpdate(int bidx);
+	
+	//public int boardDelete(int bidx, int midx, String password);
+	
+	
+	public int boardDeleteAction(int bidx, int midx, String password);
+	
 
 	
 	

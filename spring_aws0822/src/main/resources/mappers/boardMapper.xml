@@ -53,7 +53,33 @@
   	<select id ="boardSelectOne" parameterType="int" resultType="bv">
   		SELECT * FROM board where delyn='N' AND bidx = #{bidx}
   	</select>
-  
+  	
+  	
+  	<!--  조회수 기능 쿼리 -->
+  	<update id="boardViewCntUpdate" parameterType = "int">
+    	UPDATE board SET viewcnt = viewcnt+1 where bidx = #{bidx}
+    </update>
+    
+    <!--  추천수 쿼리-->
+    
+     <update id = "boardRecomUpdate" parameterType = "bv">
+     
+     	<selectKey keyProperty = "recom" resultType="int" order = "AFTER">
+			select recom from board where bidx = #{bidx}
+  		</selectKey>
+     
+    	UPDATE board SET recom = recom+1 where bidx = #{bidx}
+    </update>
+    
+    <!-- 삭제기능 -->
+    <update id="boardDeleteAction" parameterType = "HashMap">
+    	update board set delyn = 'Y', modifyday = now()  WHERE bidx = #{bidx} and midx = #{midx} and password= #{password}
+    </update>
+    
+
+   
+ 	
+    
   	
   	
   	

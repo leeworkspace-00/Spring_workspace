@@ -119,7 +119,7 @@ public class MemberController { // 컨트롤러 용도의 객체를 생성해달
 					// 확인redirect:/member/memberList.aws
 
 				} else {
-					path = "redirect:";
+					path = "redirect:/";
 
 				}
 
@@ -128,9 +128,7 @@ public class MemberController { // 컨트롤러 용도의 객체를 생성해달
 			} else { // null이면 ==> 잘못된 결과면 다시 로그인 페이지로 이동한다
 
 				
-				  rttr.addAttribute("midx",""); 
-				  rttr.addAttribute("memberId","");
-				  rttr.addAttribute("memberName","");
+				  
 				 
 				rttr.addFlashAttribute("msg", "아이디/비밀번호를 확인해주세요"); // 한번 사용하고 없어질 세션. 값을 사용한 후에 지워버림
 				path = "redirect:/member/memberLogin.aws";
@@ -139,9 +137,7 @@ public class MemberController { // 컨트롤러 용도의 객체를 생성해달
 
 		} else {
 			
-			  rttr.addAttribute("midx",""); 
-			  rttr.addAttribute("memberId","");
-			  rttr.addAttribute("memberName","");
+			  
 			 
 			rttr.addFlashAttribute("msg", "해당하는 아이디가 없습니다");
 			path = "redirect:/member/memberLogin.aws";

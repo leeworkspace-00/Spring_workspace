@@ -56,7 +56,11 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/member/memberList.aws"/> <!-- 회원 목록 보기 할때 -->
-			<mapping path="/board/boardWrite.aws"/>
+			<mapping path="/board/boardWrite.aws"/><!-- 글쓰기 화면가기 전에 로그인 인증 -->
+			<mapping path="/board/boardWriteAction.aws"/><!-- 글쓰기 동작완료 전에 로그인 인증 -->
+			<mapping path="/board/boardDeleteAction.aws"/><!-- 글삭제  로그인 인증 -->
+			<mapping path="/board/boardModifyAction.aws"/><!-- 글수정  로그인 인증 -->
+			<mapping path="/board/boardReplyAction.aws"/><!-- 답변달기   로그인 인증 -->
 			<beans:ref bean = "authInterceptor"/> <!-- 이 인터셉터가 작동하도록한다 -->
 		</interceptor>
 	</interceptors>

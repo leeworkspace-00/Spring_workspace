@@ -15,5 +15,13 @@ public interface BoardMapper {
 	public int boardInsert(BoardVo bv);
 	public int boardOriginbidxUpdate(int bidx);
 	public BoardVo boardSelectOne(int bidx);
-
+	
+	// 조회수 
+	public int boardViewCntUpdate(int bidx);
+	
+	public int boardRecomUpdate(BoardVo bv);
+	// 글 삭제 기능
+	//public int boardDelete(HashMap hm);		// 마이바티스메서드는 해시맵으로 
+	
+	public int boardDeleteAction(HashMap hm);
 }

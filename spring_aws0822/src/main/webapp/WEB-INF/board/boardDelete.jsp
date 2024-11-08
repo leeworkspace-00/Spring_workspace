@@ -1,7 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%String bidx = (String)request.getAttribute("bidx"); %>
+    <%String bidx = request.getAttribute("bidx").toString(); %>
     <%@ page import="com.myaws.myapp.domain.*" %>  
+    
+    
+<%
+String msg= "";
+
+if (request.getAttribute("msg") != null){
+ msg = (String)request.getAttribute("msg");
+}
+if (msg !=""){
+	 out.println("<script>alert('"+msg+"');</script>");	
+	 }
+%>
+    
+    
+    
     
 <!DOCTYPE html>
 <html>
@@ -11,7 +26,7 @@
 <link href="/resources/boardStyle.css" rel="stylesheet">
 
 <script>
-function saveBtn() {
+function DeleteBtn() {
 	let fm = document.frm;
 
 	
@@ -52,7 +67,7 @@ function saveBtn() {
 	</table>
 	
 	<div class="btnBox">
-		<button type="button" class="btn" onclick="check();">저장</button>
+		<button type="button" class="btn" onclick="DeleteBtn();">삭제</button>
 		<a class="btn aBtn" href="#"  onclick="history.back();">취소</a>
 	</div>
 

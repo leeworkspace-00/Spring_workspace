@@ -10,7 +10,7 @@ public class BoardVo {
 	private String writer;
 	private int recom;
 	private int viewcnt;
-	//private String filename;
+	private String filename;
 	private String writeday;
 	private String modifyday;
 	private String delyn;
@@ -107,11 +107,11 @@ public class BoardVo {
 		this.viewcnt = viewcnt;
 	}
 
-	/*
-	 * public String getFilename() { return filename; }
-	 * 
-	 * public void setFilename(String filename) { this.filename = filename; }
-	 */
+	
+	  public String getFilename() { return filename; }
+	  
+	  public void setFilename(String filename) { this.filename = filename; }
+	 
 
 	public String getWriteday() {
 		return writeday;

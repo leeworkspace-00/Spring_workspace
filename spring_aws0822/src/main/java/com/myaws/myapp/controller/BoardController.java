@@ -1,6 +1,8 @@
 package com.myaws.myapp.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
@@ -9,15 +11,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.connector.Request;
+import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,6 +35,7 @@ import com.myaws.myapp.domain.PageMaker;
 import com.myaws.myapp.domain.searchCriteria;
 import com.myaws.myapp.service.BoardService;
 import com.myaws.myapp.service.BoardServiceImpl;
+import com.myaws.myapp.util.MediaUtils;
 import com.myaws.myapp.util.UploadFileUtiles;
 
 
@@ -81,12 +91,12 @@ public class BoardController {
 	@RequestMapping(value="boardWriteAction.aws")	// 글쓰기 동작 메서드
 	public String boardWriteAction(
 			BoardVo bv,// 넘겨야할 데이터 제목, 내용, 작성자, 비밀번호(bv로 받는다)
-			@RequestParam("filename")MultipartFile filename, // 파일은 @RequestParam("filename")MultipartFile filename)
+			@RequestParam("attachfile")MultipartFile attachfile, // 파일은 @RequestParam("filename")MultipartFile filename)
 			HttpSession session, // 회원번호 꺼내고 아이디 꺼내려고 세션값 가져옴
 			HttpServletRequest request,		// 요청값 > 회원번호 가져오기 위해서 세션 생성
 			RedirectAttributes rttr		// sendredirect 로 화면 보여주기 위해서  생성
 			) throws IOException, Exception{	
-				MultipartFile file = filename;// 새로운 변수에 담아서 이름을 변경해줌
+				MultipartFile file = attachfile;// 새로운 변수에 담아서 이름을 변경해줌 ++ attachfile로 변경해서 vo에 있는 파일네임과 충돌방지 
 				String uploadedFileName = "";
 				if(! file.getOriginalFilename().equals("")) {		// ! >> 존재한다면(.equals("")없는게 아니라면)
 					
@@ -122,24 +132,148 @@ public class BoardController {
 		return path;	// 메서드 모두 실행하고 경로로 가기
 		
 		
-	}@RequestMapping(value="boardContents.aws")	
-	public String boardContents(@RequestParam("bidx") int bidx, Model model) {	
+	}
+	@RequestMapping(value ="displayFile.aws", method = RequestMethod.GET)		// get 방식으로 넘기는 것 > 파일 이름을 넘길것
+	public ResponseEntity<byte[]> displayFile(
+			@RequestParam("fileName") String fileName,	// 파일이름 넘기는 파라미터
+			@RequestParam(value ="down", defaultValue = "0") int down		// 다운로드를 받을것인지 화면에 보여줄건지 정하는 파라미터
+			) {
 		
-		BoardVo bv = boardService.boardSelectOne(bidx);
+		
+		ResponseEntity<byte[]> entity = null;			//entity : 실제 
+		
+		InputStream in = null; 	// 데이터 흐름의 시작 
+		
+		try{
+			String formatName = fileName.substring(fileName.lastIndexOf(".")+1);// 자리수 계산한다음에 +1해주고  확장자 확인하는 ..substring(마지막. 뒤에있는 문자를 자른다 > 확장자 확인)
+			MediaType mType = MediaUtils.getMediaType(formatName);
+			
+			HttpHeaders headers = new HttpHeaders();			// 헤더정보 가져오기 위해 생성
+			 
+			in = new FileInputStream(uploadPath+fileName);		// 
+			
+			
+			if(mType != null){		// 이미지 파일등에 해당되면
+				
+				if (down==1) {		// 넘어온 다운의 값이 1이면 다운로드 실행 가능하게 ~~
+					fileName = fileName.substring(fileName.indexOf("_")+1);
+					headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+					headers.add("Content-Disposition", "attachment; filename=\""+
+							new String(fileName.getBytes("UTF-8"),"ISO-8859-1")+"\"");	
+					
+				}else {			// 1이 아니면 다운로드 말고 화면에 보여줄거임
+					headers.setContentType(mType);	
+				}
+				
+			}else{		// 그게 아니면 다운로드 받는 방식으로  처리
+				
+				fileName = fileName.substring(fileName.indexOf("_")+1);
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+				headers.add("Content-Disposition", "attachment; filename=\""+
+						new String(fileName.getBytes("UTF-8"),"ISO-8859-1")+"\"");				
+			}
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.CREATED);	// entity  에 담겠다
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);		// entity에 담겠다 
+		}finally{
+			try {
+				in.close();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+		}
 		
 		
-		model.addAttribute("bv", bv);
+		return entity;
+	}
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value="boardContents.aws")			// 글 내용 가상경로 실행시 동작하는 기능 조회수++ 글 보여주기 기능 
+	public String boardContents(
+			@RequestParam("bidx") int bidx,
+			Model model) {	
+		
+		boardService.boardViewCntUpdate(bidx);		// 조회수 증가 메서드 불러와서 사용
+		BoardVo bv = boardService.boardSelectOne(bidx);		// 글 내용 1개만 가져와서 보여주는 메서드 
+		
+		
+		model.addAttribute("bv", bv); // 모델에 bv담아와서 속성값 주기 
 				
 		
 		
 		
-		String path = "WEB-INF/board/boardContents"; 
+		String path = "WEB-INF/board/boardContents"; 		// 메서드 모두 실행 후  결과는 내용페이지에서 보여준다
+		return path;
+	}
+	
+	//추천수 증가 컨트롤러
+	@ResponseBody		// 객체를 받겠다는 어노테이션
+	@RequestMapping(value="boardRecom.aws", method = RequestMethod.GET)			// 가상경로 boardRecom.aws 가 들어오면 실행되는 컨트롤러 
+	public JSONObject boardRecom(@RequestParam("bidx") int bidx) {	// 리턴값 JSONObject 으로 설정 > @ResponseBody 해서 객체를 받는다고 설정
+		
+		int value = boardService.boardRecomUpdate(bidx);		// value 에 boardRecomUpdate메서드 실행하고 결과값 담기 
+				
+		JSONObject js = new JSONObject();		// 제이슨 객체 생성해주고 
+		js.put("recom", value);		// put 로 객체에 담기 
+		
+		
+		return js;// js 리턴해주기 
+	}
+	
+	@RequestMapping(value="boardDelete.aws")			// 여기는 메서드 없음		
+	public String boardDelete(
+			@RequestParam("bidx") int bidx,
+			Model model) {	
+		
+		model.addAttribute("bidx", bidx);
+		String path = "WEB-INF/board/boardDelete"; 		
 		return path;
 	}
 	
 	
 	
 	
+	@RequestMapping(value="boardDeleteAction.aws", method = RequestMethod.POST)		// 여기가 메서드 있음
+	public String boardDeleteAction(
+			@RequestParam("bidx") int bidx,
+			@RequestParam("password") String password,
+			RedirectAttributes rttr,
+			HttpSession session) {	
+		BoardVo bv = boardService.boardSelectOne(bidx);
+		
+		int midx = Integer.parseInt(session.getAttribute("midx").toString());
+		int value = boardService.boardDeleteAction(bidx, midx, password);
+		
+		String path = "";
+		if(bv.getMidx()==midx) {
+			if(value ==1) {
+				path = "redirect:/board/boardList.aws";		// 성공하면 리스트페이지로  보내주고
+				
+			}else {
+				rttr.addFlashAttribute("msg", "비밀번호가 틀렸습니다");
+				path = "redirect:/board/boardDelete.aws?bidx="+bidx;		// 비밀번호가 틀려서 실패하면 bidx 를 가지고  삭제페이지로 보내기
+			}	
+		}else {
+			rttr.addFlashAttribute("msg", "글쓴회원이 아닙니다");
+			path = "redirect:/board/boardDelete.aws?bidx="+bidx;		// 회원번호가 달라서  실패하면 bidx 가지고 삭제페이지로 보내기 메시지만 다르게 
+			
+		}	
+		 return path;		// 경로 리턴
+	}
+		
+		
+		
+	
+	
+
 	
 	
 	
@@ -183,13 +317,7 @@ public class BoardController {
 
 		return ip;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	
 }
 
