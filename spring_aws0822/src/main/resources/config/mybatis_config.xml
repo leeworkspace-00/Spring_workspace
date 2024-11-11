@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <!-- mybatis 설정파일  -->
+<configuration> 
+<typeAliases>
+	<typeAlias alias="mv" type="com.myaws.myapp.domain.MemberVo"/>
+	<typeAlias alias="bv" type="com.myaws.myapp.domain.BoardVo"/>
+	<typeAlias alias="scri" type="com.myaws.myapp.domain.searchCriteria"/>
+
+
+</typeAliases>
+</configuration>

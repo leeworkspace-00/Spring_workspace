@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myaws.myapp.persistence.BoardMapper">   
+
+<!--  글목록보여주는 쿼리 작성 -->
+    <sql id = "search">
+    
+    	<if test="searchType != null and searchType.equals('writer')">
+    		and writer like concat('%',#{keyword},'%')
+    	</if>  
+    	
+    	
+    	<if test="searchType != null and searchType.equals('subject')">
+    		and subject like concat('%',#{keyword},'%')
+    	</if>      
+    	
+    
+    </sql>
+    
+    
+    <select id = "boardSelectAll" parameterType="HashMap" resultType="bv">		<!-- resultType="mv" >> 여러개 담기  하나를 담아도 mv로 담아오자 -->   
+  		SELECT * FROM board where delyn='N' 
+ 		
+  		<include refid = "search"/>
+  		
+  		ORDER BY originbidx desc, depth asc limit #{startPageNum}, #{perPageNum} 		
+  	</select>
+  	  	
+  	<select id ="boardTotalCount" parameterType="scri" resultType="int" >
+  		SELECT count(*) as cnt FROM board where delyn='N'	
+ 		<include refid = "search"/>
+  	</select>
+  	
+  	
+  	<!-- 글쓰기 쿼리문 작성 -->
+  	<insert id = "boardInsert" parameterType="bv">
+  		<!--  mybatis 안에서 사용하는 selectKey -->
+  		<selectKey keyProperty = "bidx" resultType="int" order = "AFTER">
+			select max(bidx) as bidx from board	 	
+  		</selectKey>
+  		
+  		INSERT INTO board (originbidx,depth,level_,subject,contents,writer,password,midx,filename,ip)
+  		 value(null,0,0,#{subject},#{contents},#{writer},#{password},#{midx},#{uploadedFilename},#{ip})
+  	</insert>
+  	
+  	
+  	<update id="boardOriginbidxUpdate" parameterType="int">
+  		update board set originbidx = #{bidx} where bidx = #{bidx}
+  	</update>
+  	
+  	<select id ="boardSelectOne" parameterType="int" resultType="bv">
+  		SELECT * FROM board where delyn='N' AND bidx = #{bidx}
+  	</select>
+  	
+  	
+  	<!--  조회수 기능 쿼리 -->
+  	<update id="boardViewCntUpdate" parameterType = "int">
+    	UPDATE board SET viewcnt = viewcnt+1 where bidx = #{bidx}
+    </update>
+    
+    <!--  추천수 쿼리-->
+    
+     <update id = "boardRecomUpdate" parameterType = "bv">
+     
+     	<selectKey keyProperty = "recom" resultType="int" order = "AFTER">
+			select recom from board where bidx = #{bidx}
+  		</selectKey>
+     
+    	UPDATE board SET recom = recom+1 where bidx = #{bidx}
+    </update>
+    
+    <!-- 삭제기능 -->
+    <update id="boardDeleteAction" parameterType = "HashMap">
+    	update board set delyn = 'Y', modifyday = now()  WHERE bidx = #{bidx} and midx = #{midx} and password= #{password}
+    </update>
+    
+    
+    <!-- ==========11.11========= -->
+    <!-- 수정기능 -->
+	<update id="boardUpdate" parameterType="bv">
+		update board set subject = #{subject}, contents = #{contents}, writer = #{writer}, modifyday = now(), filename = #{uploadedFilename} where bidx = #{bidx} and password = #{password} and midx = #{midx}
+	</update>
+
+	<!-- 답변하기 기능 -->
+	<update id="boardReplyUpdate" parameterType="bv">
+		update board set depth= depth+1 where originbidx =#{originbidx}  and depth > #{depth}
+	</update>
+
+	<!--  답변한 결과물 삽입하기 -->
+	<insert id="boardReplyInsert" parameterType="bv">
+		<selectKey keyProperty="bidx"  resultType="int" order="AFTER">
+			select max(bidx) as bidx from board
+		</selectKey>
+		insert into board (originbidx, depth, level_, subject, contents, writer, midx, filename, password, ip) 
+		values(#{originbidx}, #{depth}+1, #{level_}+1, #{subject}, #{contents}, #{writer}, #{midx}, #{uploadedFilename}, #{password}, #{ip})
+	</insert>
+   
+ 	
+    
+  	
+  	
+  	
+  	
+    
+
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/" /> <!-- 첫 값은 빈거 -->
+		<beans:property name="suffix" value=".jsp" /> <!--  마지막 값은 이걸로 정해서 가운데 넣을 주소는 작성자가 정해라 -->
+	</beans:bean>
+	
+	
+		<!--  업로드 경로 빈저장  -->
+	<beans:bean id="uploadPath" class="java.lang.String">
+		<beans:constructor-arg value = "D:/dev/springUpload"></beans:constructor-arg>	
+	</beans:bean> 
+	
+	<!--  문자열이 아닌 이미지 등 여러 파일 업로드 할 때 사용하는 빈 등록 -->
+	
+	<beans:bean id="multipartResolver" 
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<beans:property name="maxUploadSize" value="10485760" />	
+	
+	</beans:bean>
+	
+	
+	
+	<beans:bean id = "loginInterceptor" class = "com.myaws.myapp.interceptor.LoginInterceptor">
+	</beans:bean>
+	
+	<beans:bean id = "authInterceptor" class = "com.myaws.myapp.interceptor.AuthInterceptor">
+	</beans:bean>
+	
+	
+	<!--  -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/memberLoginAction.aws"/> <!-- 로그인하러 갈때 연결해주기  -->
+			<beans:ref bean = "loginInterceptor"/> <!--  참조값은 저 위에 있는 콩안에 있는 걸로 참조하겠다 -->
+		</interceptor>
+	</interceptors>
+	
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/memberList.aws"/> <!-- 회원 목록 보기 할때 -->
+			<mapping path="/board/boardWrite.aws"/><!-- 글쓰기 화면가기 전에 로그인 인증 -->
+			<mapping path="/board/boardWriteAction.aws"/><!-- 글쓰기 동작완료 전에 로그인 인증 -->
+			<mapping path="/board/boardDeleteAction.aws"/><!-- 글삭제  로그인 인증 -->
+			<mapping path="/board/boardModifyAction.aws"/><!-- 글수정  로그인 인증 -->
+			<mapping path="/board/boardReplyAction.aws"/><!-- 답변달기   로그인 인증 -->
+			<mapping path="/board/boardDelete.aws"/><!-- 글삭제  로그인 인증 -->
+			<mapping path="/board/boardModify.aws"/><!-- 글수정  로그인 인증 -->
+			<mapping path="/board/boardReply.aws"/><!-- 답변달기   로그인 인증 -->
+			<beans:ref bean = "authInterceptor"/> <!-- 이 인터셉터가 작동하도록한다 -->
+		</interceptor>
+	</interceptors>
+	
+
+	
+	
+		<context:component-scan base-package="com.myaws.myapp.controller" />
+	
+	
+</beans:beans>
