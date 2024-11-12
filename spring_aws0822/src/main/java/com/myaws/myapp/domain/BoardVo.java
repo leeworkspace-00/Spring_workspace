@@ -1,6 +1,7 @@
 package com.myaws.myapp.domain;
 
 public class BoardVo {
+	
 	private int bidx;
 	private int originbidx;
 	private int depth;

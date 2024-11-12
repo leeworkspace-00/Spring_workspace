@@ -47,7 +47,7 @@ function getImageLink(fileName) {		// 이미지 링크 가져오는 메서드
 
 
 function download_() {
-	//주소 사이에 s- 빼고 전체 파일이름추출 
+	//주소 사이에 s- 빼고 전체 파일이름추출 > 썸네일 파일아닌 원본파일 저장하고 올리기위함
 	
 	
 	var downloadImage = getImageLink("<%=bv.getFilename()%>");		
@@ -81,22 +81,24 @@ function commentDel(cidx)  {
 
 	return;
 }
-
-$.boardCommentList = function() {		// jquery 함수 만드는 문법 앞에 이름 = function(){~}
+//ready 밖에 생성해주기 
+$.boardCommentList = function() {		// jquery 함수 만드는 문법 앞에 이름 = function(){~} 
 	$.ajax({	// 댓글쓰기 버튼
 		type :"get",	//	전송방식 : get방식으로 전송하겠다 선언
-		url : "<%=request.getContextPath()%>/comment/commentList.aws?bidx=<%=bv.getBidx()%>",
+		//rest API : 주소 사이에 집어넣어서 사용한다
+		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/commentList.aws",
 		dataType : "json",	
 		success : function(result) {
-			//alert("전송성공 테스트");
+			alert("전송성공 테스트");
 			
 			var strTr = "";
 				
-				$(result).each(function(){
+				$(result.clist).each(function(){
 					var btnn="";
 					
-					 //현재로그인 사람과 댓글쓴 사람의 번호가 같을때만 나타내준다
-					if (this.midx == "<%=midx%>") {
+					 //조건문 : 현재로그인 사람과 댓글쓴 사람의 번호가 같을때만 나타내준다
+					 //삭제되지 않은 게시물만
+					if (this.midx == "<%=midx%>") {		
 						if (this.delyn=="N"){
 							btnn= "<button type='button' onclick='commentDel("+this.cidx+");'>삭제</button>";
 						}			

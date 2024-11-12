@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myaws.myapp.persistence.CommentMapper">   
+
+	<select id = "commentSelectAll" parameterType="int" resultType="cv">   
+  		SELECT * FROM comment where delyn = 'N' and bidx = #{bidx} ORDER BY cidx desc
+  	</select>
+
+
+
+
+
+</mapper>

@@ -52,7 +52,8 @@
 		</bean>
 		<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/> 	<!-- 프록시 : 우회하다 -->	
 		
-		
+			<!-- aop빈 등록 -->
+		 <aop:aspectj-autoproxy></aop:aspectj-autoproxy> 
 		
 		
 		
@@ -62,8 +63,7 @@
 			<context:exclude-filter type = "annotation" expression = "org.springframework.stereotype.Controller"/>
 		</context:component-scan>
 		
-		<!-- aop빈 등록 -->
-		 <aop:aspectj-autoproxy></aop:aspectj-autoproxy> 
+	
 		
 
 		
