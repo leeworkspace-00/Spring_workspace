@@ -6,9 +6,25 @@
 <mapper namespace="com.myaws.myapp.persistence.CommentMapper">   
 
 	<select id = "commentSelectAll" parameterType="int" resultType="cv">   
-  		SELECT * FROM comment where delyn = 'N' and bidx = #{bidx} ORDER BY cidx desc
+  		SELECT * FROM comment where delyn = 'N' and bidx = #{0} ORDER BY cidx desc limit 0,#{1}
   	</select>
 
+
+	<insert id = "commentInsert" parameterType="cv">
+		insert into comment(csubject,ccontents,cwriter,bidx,midx,cip) value(null,#{ccontents},#{cwriter},#{bidx},#{midx},#{cip})
+	</insert>
+	
+	
+	
+	<update id="commentDelete" parameterType="cv">
+		update comment set delyn='Y', cip = #{cip} where cidx = #{cidx} and midx = #{midx} 
+	</update>
+	
+	
+	<select id ="commentTotalCnt" parameterType="int" resultType="int">
+		select count(*) as cnt from comment where delyn = 'N' and bidx = #{bidx}
+	</select>
+	
 
 
 

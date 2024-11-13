@@ -64,6 +64,8 @@
 			<mapping path="/board/boardDelete.aws"/><!-- 글삭제  로그인 인증 -->
 			<mapping path="/board/boardModify.aws"/><!-- 글수정  로그인 인증 -->
 			<mapping path="/board/boardReply.aws"/><!-- 답변달기   로그인 인증 -->
+			
+			
 			<beans:ref bean = "authInterceptor"/> <!-- 이 인터셉터가 작동하도록한다 -->
 		</interceptor>
 	</interceptors>

@@ -37,11 +37,15 @@ import com.myaws.myapp.service.BoardService;
 import com.myaws.myapp.service.BoardServiceImpl;
 import com.myaws.myapp.util.MediaUtils;
 import com.myaws.myapp.util.UploadFileUtiles;
+import com.myaws.myapp.util.UserIp;
 
 
 @Controller
 @RequestMapping(value="/board/")
 public class BoardController {
+	
+	@Autowired(required=false)		// 널값도 허용하겠다는 의미
+	private UserIp userIp;
 	
 	@Autowired(required=false)
 	private BoardService boardService;
@@ -110,7 +114,7 @@ public class BoardController {
 				int midx_int = Integer.parseInt(midx);
 				
 				
-				String ip = getUserIp(request);
+				String ip = userIp.getUserIp(request);		
 				
 				bv.setUploadedFilename(uploadedFileName);
 				bv.setMidx(midx_int);
@@ -298,7 +302,7 @@ public class BoardController {
 			
 			String midx = request.getSession().getAttribute("midx").toString();
 			int midx_int = Integer.parseInt(midx);	// 회원번호 담기		
-			String ip = getUserIp(request);	// 아이피 담기 
+			String ip = userIp.getUserIp(request);			// 아이피 담기 
 			
 			bv.setUploadedFilename(uploadedFileName);   // bv 에 파일이름 세팅
 			bv.setMidx(midx_int);						// 회원번호 세팅
@@ -348,7 +352,7 @@ public class BoardController {
 			
 			String midx = request.getSession().getAttribute("midx").toString();
 			int midx_int = Integer.parseInt(midx);			// 회원번호 담기
-			String ip = getUserIp(request);					// 아이피 정보 담기 
+			String ip = userIp.getUserIp(request);					// 아이피 정보 담기 
 			
 			bv.setUploadedFilename(uploadedFileName);   // bv에 파일이름 세팅해주기
 			bv.setMidx(midx_int);						//bv에 회원번호 세팅해주기 
@@ -377,46 +381,7 @@ public class BoardController {
 	
 	
 	
-	public String getUserIp(HttpServletRequest request) throws Exception { // 클라이언트 ip 주소 뽑는 메서드 이클립스에서 가져오기 
-
-		String ip = null;
-
-		ip = request.getHeader("X-Forwarded-For");
-
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_CLIENT_IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("X-Real-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("X-RealIP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("REMOTE_ADDR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-
-		if (ip.equals("0:0:0:0:0:0:0:1") || ip.equals("127.0.0.1")) {
-			InetAddress address = InetAddress.getLocalHost();
-			ip = address.getHostAddress();
-
-		}
-
-		return ip;
-	}
-
+	
 	
 }
 

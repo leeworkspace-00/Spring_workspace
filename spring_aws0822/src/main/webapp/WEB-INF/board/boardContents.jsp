@@ -26,7 +26,7 @@
 <script>
 
 function checkImageType (fileName) {
-	var  pattern = /jpg$|gif$|png$|jpeg$/i // 자바스크립트 정규 표현식 이런 파일들을 취급하겠다는 의미
+	var  pattern = /jpg$|gif$|png$|jpeg$/i; // 자바스크립트 정규 표현식 이런 파일들을 취급하겠다는 의미
 
 	return fileName.match(pattern);
 }
@@ -63,14 +63,16 @@ function download_() {
 
 function commentDel(cidx)  {
 	let ans = confirm("삭제하시겠습니까?");
+	alert("cidx" + cidx);
+	
 	if(ans == true) {		// 삭제하겠다면 ?
 			
 		$.ajax({
 			type :"get",	//	전송방식 : get방식으로 전송하겠다 선언
-			url : "<%=request.getContextPath()%>/comment/commentDeleteAction.aws?cidx="+cidx,
+			url : "<%=request.getContextPath()%>/comment/"+cidx+"/commentDeleteAction.aws",
 			dataType : "json",		//json : 문서에서 {"키값":"value값","키값2:"value값2"}
 			success : function(result) {		// 결과가 넘어와서 성공한 경우 받는 영역
-				
+				alert("result" + result.value)
 				$.boardCommentList();
 			},
 			error : function(){  //결과가 실패했을때 받는 영역
@@ -83,13 +85,24 @@ function commentDel(cidx)  {
 }
 //ready 밖에 생성해주기 
 $.boardCommentList = function() {		// jquery 함수 만드는 문법 앞에 이름 = function(){~} 
+	//alert("test");
+
+	let block = $("#block").val();
+	alert("block" + block);
+
+
 	$.ajax({	// 댓글쓰기 버튼
 		type :"get",	//	전송방식 : get방식으로 전송하겠다 선언
 		//rest API : 주소 사이에 집어넣어서 사용한다
-		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/commentList.aws",
+		// 주소사이에 게시글 번호, block 값 담아서 넘기기    
+		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/"+block+"/commentList.aws",		
 		dataType : "json",	
+		
 		success : function(result) {
 			alert("전송성공 테스트");
+			
+			
+			
 			
 			var strTr = "";
 				
@@ -100,21 +113,23 @@ $.boardCommentList = function() {		// jquery 함수 만드는 문법 앞에 이�
 					 //삭제되지 않은 게시물만
 					if (this.midx == "<%=midx%>") {		
 						if (this.delyn=="N"){
-							btnn= "<button type='button' onclick='commentDel("+this.cidx+");'>삭제</button>";
+							btnn = "<button type='button' onclick='commentDel("+this.cidx+");'>삭제</button>";
+
 						}			
 					}
 					
 					
+					// 댓글 15개만 보여주는 기능 생성
 					
-					
-					strTr = strTr+"<tr>"
-					+"<td>"+this.cidx+"</td>"
-					+"<td>"+this.cwriter+"</td>"
-					+"<td class='content'>"+this.ccontents+"</td>"
-					+"<td>"+this.writeday+"</td>"
-					+"<td>"+btnn+"</td>"
-					+"</tr>";
-				});
+					 strTr = strTr + "<tr>"
+			            +"<td>"+this.cidx+"</td>"
+			            +"<td>"+this.cwriter+"</td>"
+			            +"<td class='content'>"+this.ccontents+"</td>"
+			            +"<td>"+this.writeday+"</td>"
+			            +"<td>"+btnn+"</td>"
+			            +"</tr>";
+			         });
+
 		
 				var str = "<table class='replyTable'>"
 				+"<tr>"
@@ -126,10 +141,22 @@ $.boardCommentList = function() {		// jquery 함수 만드는 문법 앞에 이�
 				+"</tr>"+strTr+"</table>";
 				
 		$("#commentListView").html(str);	
-			},
+		
+		if(result.moreView == "N") {// 댓글이 15개 이상일 때 댓글 더보기 버튼 나타나도록 설정
+			$("#morebtn").css("disply","none");		// 안보이게
+		}else {
+			$("#morebtn").css("disply","block"); 	// 보이게 
+			
+		}
+		let nextBlock = result.nextBlock;	
+		
+			$("#block").val(nextBlock); 
+
+		},
 			error : function(){  //결과가 실패했을때 받는 영역
-				//alert("전송실패 테스트");	
+				alert("전송실패 테스트");	
 			}
+			
 	
 		});
 	
@@ -148,6 +175,9 @@ $(document).ready(function(){
 	$.boardCommentList();
 	
 	
+		
+	
+	
 	$("#btn").click(function() {		// 추천버튼 클릭 함수
 		//alert("추천버튼을 클릭했습니다");
 		$.ajax({
@@ -161,7 +191,7 @@ $(document).ready(function(){
 				$("#btn").val(str);
 			},
 			error : function(){  //결과가 실패했을때 받는 영역
-				//alert("전송실패 테스트");	
+				alert("전송실패 테스트");	
 			}
 	
 		});
@@ -173,20 +203,20 @@ $(document).ready(function(){
 		
 		//alert("댓글버튼확인");
 		let loginCheck = "<%=midx%>";
-		if (loginCheck == "" || loginCheck == "null" || loginCheck == null){		//로그인 체크하고
-			alert=("로그인해주세요");			
+		if (loginCheck == "" || loginCheck == "null" || loginCheck == null || loginCheck == 0){		//로그인 체크하고
+			alert("로그인해주세요");			
 			return;
 		}
 
-		let cwriter =$("#cwriter").val();	// 작성자 데이터 담고 
-		let ccontents =$("#ccontents").val(); // 내용담아
+		let cwriter = $("#cwriter").val();	// 작성자 데이터 담고 
+		let ccontents = $("#ccontents").val(); // 내용담아
 		
 		if(cwriter =="" ) {	// 내용이 없으면 
-			alert("내용을 입력해주세요");
+			alert("작성자를 입력해주세요");
 			$("#cwriter").focus();		// 깜빡깜빡
 			return;
 		}	else if(ccontents=="") {		// 작성자가 없으면
-			alert("작성자를 입력해주세요");			
+			alert("내용을 입력해주세요");		
 			$("#ccontents").focus();		// 깜빡깜빡
 			return;
 
@@ -198,9 +228,9 @@ $(document).ready(function(){
 			url : "<%=request.getContextPath()%>/comment/commentWriteAction.aws",
 	
 			data : {"cwriter":cwriter,
-				"ccontents":ccontents,
-				"bidx":"<%=bv.getBidx()%>",
-				"midx":"<%=midx%>"
+					"ccontents":ccontents,
+					"bidx":"<%=bv.getBidx()%>",
+					"midx":"<%=midx%>"
 				},
 				dataType : "json",		
 				
@@ -208,17 +238,22 @@ $(document).ready(function(){
 					//alert("댓글전송성공테스트");
 					if(result.value ==1){		// 만약에 리턴값이 1 이면 ~ 실행됨 아니면  전송실패됨
 						$("#ccontents").val("");
+						 $("#block").val(1);
 					}				
 					$.boardCommentList();
 				},
 			error : function(){  
-				//alert("전송실패 테스트");	
+				alert("전송실패");	
 			}
 	
 		});
 
 	}); 
 	
+	$("#more").click(function(){			
+		$.boardCommentList();		
+	});
+
 });
 
 
@@ -275,7 +310,18 @@ $(document).ready(function(){
 		<button type="button" id="cmtBtn" class="replyBtn">댓글쓰기</button>
 	</form>
 	
+	
+	
 	<div id="commentListView"></div>
+	
+
+	
+	<div id = "morebtn" style = "text-align: center; line-height:50px;">
+		<button type = "button" id = "more">더보기</button> <!--  더보기 버튼 생성 -->
+		<input type='hidden' id='block'  value='1'>
+	</div>
+	
+	
 	
 </article>
 

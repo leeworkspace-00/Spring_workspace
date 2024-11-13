@@ -29,12 +29,40 @@ public class CommentServiceImpl implements CommentService { // BoardService에�
 	
 
 	@Override
-	public ArrayList<CommentVo> commentSelectAll(int bidx) {
+	public ArrayList<CommentVo> commentSelectAll(int bidx, int block) {		// 파라미터 값의 데이터타입이 같으면 해쉬맵 말고 따로 불러도됨
+		block = block*15;
 
-		ArrayList<CommentVo> clist = cm.commentSelectAll(bidx);
+		ArrayList<CommentVo> clist = cm.commentSelectAll(bidx, block);
 		return clist;
 		
 	}
+
+
+
+	@Override
+	public int commentInsert(CommentVo cv) {
+		int value = cm.commentInsert(cv);
+		return value;
+	}
+
+
+
+	@Override
+	public int commentDelete(CommentVo cv) {
+		int value = cm.commentDelete(cv);
+		return value;
+	}
+
+
+
+	@Override
+	public int commentTotalCnt(int bidx) {
+		int cnt = cm.commentTotalCnt(bidx);
+		return cnt;
+	}
+	
+	
+	
 	
 }	
 	

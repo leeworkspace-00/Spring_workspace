@@ -93,9 +93,6 @@ public class BoardServiceImpl implements BoardService { // BoardService에서 �
 		hm.put("password", password);
 		
 		int cnt = bm.boardDeleteAction(hm);
-		
-		
-		
 		return cnt;
 		
 	

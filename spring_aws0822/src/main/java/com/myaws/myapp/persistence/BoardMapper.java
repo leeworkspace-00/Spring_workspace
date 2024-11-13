@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.myaws.myapp.domain.BoardVo;
+import com.myaws.myapp.domain.CommentVo;
 import com.myaws.myapp.domain.searchCriteria;
 // mybaits 용 메서드  
 public interface BoardMapper {
@@ -30,4 +31,6 @@ public interface BoardMapper {
 	public int boardUpdate(BoardVo bv);
 	public int boardReplyUpdate(BoardVo bv);
 	public int boardReplyInsert(BoardVo bv);
+	
+	
 }

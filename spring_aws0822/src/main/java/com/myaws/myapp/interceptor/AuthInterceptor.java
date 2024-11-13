@@ -17,7 +17,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {		// bean 등록
 
 		HttpSession session = request.getSession();
 		
-		if(session.getAttribute("midx")==null) {
+		if(session.getAttribute("midx") == null) {
 			
 			// 회원번호가 없으면 = 로그인 안되어 있는 상태면
 			// 이동하려는 주소를 보관한 상태로  로그인 페이지로 보낸다
