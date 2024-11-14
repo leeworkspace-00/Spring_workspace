@@ -1,8 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ page import="com.myaws.myapp.domain.*" %>  
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.myaws.myapp.domain.*" %>  
+<%@ taglib prefix = "c" uri ="http://java.sun.com/jsp/jstl/core"%>		<!-- jstl을 사용하겠다는 선언 어노테이션으로 -->
+
+
     
-<%
+<%-- <%
 String msg= "";
 
 if (request.getAttribute("msg") != null){
@@ -11,7 +13,7 @@ if (request.getAttribute("msg") != null){
 if (msg !=""){
 	 out.println("<script>alert('"+msg+"');</script>");	
 	 }
-%>
+%> --%>
 
 <!DOCTYPE html>
 <html>
@@ -44,7 +46,7 @@ function saveBtn()  {
 	}else {
 		let ans=confirm("저장하시겠습니까?");	// 함수의 값을 참과 거짓 true false로 나눈다 
 		if(ans==true) {
-			fm.action="<%=request.getContextPath()%>/board/boardWriteAction.aws";
+			fm.action="${pageContext.request.contextPath}/board/boardWriteAction.aws";
 			fm.method="post";
 			fm.enctype="multipart/form-data";		// 문자를 넘길때 어떤 형태로 넘길건지 지정한다
 			//multipart = 이미지파일과 같은 여러형태의 파일 타입을 저장하고 업로드하고 다운로드 받을거임

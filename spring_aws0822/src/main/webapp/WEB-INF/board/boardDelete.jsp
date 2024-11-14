@@ -2,9 +2,9 @@
     pageEncoding="UTF-8"%>
     <%String bidx = request.getAttribute("bidx").toString(); %>
     <%@ page import="com.myaws.myapp.domain.*" %>  
+    <%@ taglib prefix = "c" uri ="http://java.sun.com/jsp/jstl/core"%>	    
     
-    
-<%
+<%-- <%
 String msg= "";
 
 if (request.getAttribute("msg") != null){
@@ -15,7 +15,7 @@ if (msg !=""){
 	 }
 %>
     
-    
+     --%>
     
     
 <!DOCTYPE html>
@@ -38,7 +38,7 @@ function DeleteBtn() {
 	
 	let ans=confirm("삭제하시겠습니까?");	// 함수의 값을 참과 거짓 true false로 나눈다 
 	if(ans==true) {
-		fm.action="<%=request.getContextPath()%>/board/boardDeleteAction.aws";
+		fm.action="${pageContext.request.contextPath}/board/boardDeleteAction.aws";
 		fm.method="post";
 		fm.submit();
 	}
@@ -56,7 +56,7 @@ function DeleteBtn() {
 </header>
 
 <form name="frm">
-<input type = "hidden" name = "bidx" value = "<%=bidx%>">
+<input type = "hidden" name = "bidx" value = "${bv.bidx}">
 
 	<table class = "writeTable">
 		<tr>

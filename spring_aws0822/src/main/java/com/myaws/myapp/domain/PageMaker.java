@@ -12,6 +12,7 @@ public class PageMaker {
 
 	private boolean prev; // 이전버튼
 	private boolean next; // 다음버튼
+	
 
 	private searchCriteria scri;
 
